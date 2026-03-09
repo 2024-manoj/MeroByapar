@@ -1,6 +1,6 @@
-const { default: mongoose, mongo } = require("mongoose");
+// const { default: mongoose, mongo } = require("mongoose");
 
-const mongoose = rquire(mongoose);
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
     },
 
-    store:{
+    store_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Store'
         
