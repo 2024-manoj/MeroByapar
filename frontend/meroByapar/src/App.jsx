@@ -1,20 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Dashboard from "./pages/Dashboard";
-import Products from "./pages/Products";
-import Users from "./pages/Users";
+// App.jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
 
 function App() {
+  // Line 9 is likely here. 
+  // Ensure you aren't calling hooks inside a conditional like:
+  // if (true) { const ref = useRef(); } 
+
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <Routes>
-
         <Route path="/" element={<Dashboard />} />
-
-        <Route path="/products" element={<Products />} />
-
-        <Route path="/users" element={<Users />} />
-
+        {/* Your other routes */}
       </Routes>
     </BrowserRouter>
   );
