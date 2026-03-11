@@ -22,6 +22,11 @@ const storeSchema = new moongoose.Schema(
       required: [true, "phone number ta chaiyonta "],
     },
 
+    address:{
+      type: String,
+      required: true 
+    },
+
     subscription: {
       status: {
         type: String,
