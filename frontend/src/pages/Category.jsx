@@ -1,26 +1,9 @@
-const moongoose = require("mongoose");
+function Category() {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold">Category Page</h1>
+    </div>
+  );
+}
 
-const categorySchema = new moongoose.Schema(
-  {
-    category_name: {
-      type: String,
-      required: [true, "category ta chaiyo ni kun kun items k ma parxa"],
-      trim: true,
-    },
-     store_id:{
-        type:moongoose.Schema.Types.ObjectId,
-        ref:'Store',
-        required:true,
-     },
-
-    description: String,
-    image: String,
-  },
-
-  
-  { timestamps: true },
-);
-
-categorySchema.index({category_name:1, store_id:1}, {unique: true})
-
-module.exports = moongoose.model("Category", categorySchema);
+export default Category;
