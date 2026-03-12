@@ -1,5 +1,3 @@
-
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
@@ -11,10 +9,11 @@ const auth = async (req, res, next) => {
       return res.status(401).json({ error: 'Please login first' });
     }
 
+    // Decode JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ 
-      user_id: decoded.user_id 
-    }).select('-password');
+
+    // Use _id to find user
+    const user = await User.findById(decoded.id).select('-password');
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });

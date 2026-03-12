@@ -84,7 +84,7 @@ const updateStore = async (req, res) => {
       req.params.id,
       {
         name,
-        location,
+        address,
       },
       {
         new: true,
