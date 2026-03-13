@@ -3,6 +3,11 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+
 dotenv.config();
 
 
@@ -28,6 +33,12 @@ app.get('/', (req, res)=>{
         message: 'SERVER CHAI CHALNA THALYO HAITA '
     })
 }) 
+
+
+app.use('/api', userRoutes);
+app.use('/api',authRoutes);
+app.use('/api', supplierRoutes);
+app.use('/api', categoryRoutes);
 
 
 
