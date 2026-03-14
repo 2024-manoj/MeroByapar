@@ -1,6 +1,6 @@
-const PurchaseItem = require('../models/PurchaseItem');
-const Purchase = require('../models/Purchase');
-const Product = require('../models/Product');
+const PurchaseItem = require('../model/Purchase_item');
+const Purchase = require('../model/Purchase');
+const Product = require('../model/Product');
 
 
 const createPurchaseItem = async (req, res) => {

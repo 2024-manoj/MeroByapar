@@ -1,8 +1,8 @@
-const Sale = require('../models/Sale');
-const SaleItem = require('../models/SaleItem');
-const Product = require('../models/Product');
-const User = require('../models/User');
-const Store = require('../models/Store');
+const Sale = require('../model/Sale');
+const SaleItem = require('../model/Sale_item');
+const Product = require('../model/Product');
+const User = require('../model/User');
+const Store = require('../model/Store');
 
 const createSale = async (req, res) => {
   try {

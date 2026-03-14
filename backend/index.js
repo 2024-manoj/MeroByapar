@@ -3,15 +3,25 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+require('./model/Store');        // पहिले Store
+require('./model/Category');     // अनि Category
+require('./model/Product');      // बाँकी models
+require('./model/User');
+require('./model/Supplier');
+
+
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const supplierRoutes = require('./routes/supplierRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+// const userRoutes = require('./routes/userRoutes')
 
 dotenv.config();
 
 
 const app = express();
+app.use(express.json());
+app.use(cors());
 
 
 

@@ -1,6 +1,6 @@
-const SaleItem = require("../models/SaleItem");
-const Sale = require("../models/Sale");
-const Product = require("../models/Product");
+const SaleItem = require("../model/Sale_item");
+const Sale = require("../model/Sale");
+const Product = require("../model/Product");
 
 const createSaleItem = async (req, res) => {
   try {
