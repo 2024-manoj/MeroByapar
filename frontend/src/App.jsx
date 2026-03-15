@@ -1,16 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import AdminDashboard from "./pages/AdminDashboard";
+import ManagerDashboard from "./pages/ManagerDashboard";
+import CashierDashboard from "./pages/CashierDashboard";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Category from "./pages/Category";
 import Product from "./pages/Product";
 import Purchase from "./pages/Purchase";
-import PurchaseItem from "./pages/Purchase_item";
-import Sale from "./pages/Sale";
-import SaleItems from "./pages/Sale_items";
-import Store from "./pages/Store";
-import Supplier from "./pages/Supplier";
-import User from "./pages/User";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+
 
 function App() {
   return (
@@ -19,15 +20,16 @@ function App() {
 
       <div className="p-6">
         <Routes>
-          <Route path="/" element={<Category />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/manager" element={<ManagerDashboard />} />
+          <Route path="/cashier" element={<CashierDashboard />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/category" element={<Category />} />
           <Route path="/product" element={<Product />} />
           <Route path="/purchase" element={<Purchase />} />
-          <Route path="/purchase-item" element={<PurchaseItem />} />
-          <Route path="/sale" element={<Sale />} />
-          <Route path="/sale-item" element={<SaleItems />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/supplier" element={<Supplier />} />
-          <Route path="/user" element={<User />} />
+    
         </Routes>
       </div>
 

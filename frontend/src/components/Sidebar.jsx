@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Productcard = () => {
+const Sidebar = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const Productcard = () => {
   )
 }
 
-export default Productcard
+export default Sidebar
