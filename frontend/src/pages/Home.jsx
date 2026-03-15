@@ -1,24 +1,11 @@
+import React from "react";
 
-/*
-Purpose: Landing page / public page.
+function Home() {
+  return (
+    <div>
+      <h1>Welcome to MeroByapar</h1>
+    </div>
+  );
+}
 
-What to show:
-
-Project name MeroByapar
-
-Short description
-
-Login button
-
-Register button
-
-maybe business info
-
-Example UI idea:
-
-Navbar
-Welcome to MeroByapar
-Manage your business easily
-[Login] [Register]
-Footer
-*/
+export default Home;
