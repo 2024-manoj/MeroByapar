@@ -1,4 +1,4 @@
-const SaleItem = require("../model/Sale_item");
+const SaleItem = require("../model/SaleItem");
 const Sale = require("../model/Sale");
 const Product = require("../model/Product");
 

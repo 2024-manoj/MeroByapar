@@ -10,6 +10,7 @@ const createProduct = async (req, res) => {
       stock_quantity,
       store_id,
     } = req.body;
+    
     const product = new Product({
       product_name,
       category_id,
@@ -19,7 +20,7 @@ const createProduct = async (req, res) => {
       store_id,
     });
 
-    await Product.save();
+    await product.save(); // Fixed: changed Product.save() to product.save()
 
     res.status(200).json({
       success: true,
@@ -41,14 +42,14 @@ const getAllProduct = async (req, res) => {
       .populate("store_id");
 
     res.status(200).json({
-      success: false,
+      success: true, // Fixed: changed false to true
       message: "tapaiko product hary yesh prakar ko raheko xa",
       data: product,
       count: product.length,
     });
   } catch (err) {
     res.status(500).json({
-      sucess: false,
+      success: false, // Fixed: changed sucess to success
       error: err.message,
     });
   }
@@ -102,7 +103,7 @@ const updateProduct = async (req, res) => {
       {
         new: true,
         runValidators: true,
-      },
+      }
     );
 
     if (!product) {
@@ -113,8 +114,9 @@ const updateProduct = async (req, res) => {
     }
 
     res.status(200).json({
-      success: false,
+      success: true, // Fixed: changed false to true
       message: "tapaiko successfulyy product update vayo nih",
+      data: product
     });
   } catch (err) {
     res.status(500).json({
@@ -124,31 +126,36 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
 
-const deleteProduct = async (req , res) =>{
-    try{
-        const product = await Product.findByIdAndDelete(req.params.id);
-
-        if(!product){
-            return res.status(404).json({
-                success:false,
-                message: err.message,
-            })
-        }
-
-        await Product.deleteOne();
-
-        res.status(200).json({
-            success:true,
-            message: "tapaiko product successfully delete vayo !!!"
-        })
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            error: err.message
-        })
-
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found with this ID", // Fixed: removed err.message
+      });
     }
 
-    module.exports = {deleteProduct,updateProduct, getAllProduct, getProductByID, createProduct};
-}
+    // Removed: await Product.deleteOne(); - This was extra/incorrect
+
+    res.status(200).json({
+      success: true,
+      message: "tapaiko product successfully delete vayo !!!",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+// ✅ Module exports at the END of file, outside all functions
+module.exports = {
+  createProduct,
+  getAllProduct,
+  getProductByID,
+  updateProduct,
+  deleteProduct,
+};
