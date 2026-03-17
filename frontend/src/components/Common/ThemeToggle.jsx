@@ -16,7 +16,7 @@ function ThemeToggle() {
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
+    <div className="flex items-center gap-6">
       <button
         onClick={toggleTheme}
         className="px-5 py-2 rounded-full shadow-lg bg-gray-800 text-white dark:bg-white dark:text-black transition-all duration-300"
