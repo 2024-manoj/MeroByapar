@@ -1,5 +1,4 @@
 const Store = require("../model/Store");
-// const User = require("../model/User");
 
 const createStore = async (req, res) => {
   try {
@@ -16,8 +15,7 @@ const createStore = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message:
-        "Tapaiko store safata purabhak create vayeko jankarai garauna chahanxum",
+      message: "Store created successfully",
       data: store,
     });
   } catch (err) {
@@ -30,12 +28,12 @@ const createStore = async (req, res) => {
 
 const getAllStores = async (req, res) => {
   try {
-    const store = await Store.find();
+    const stores = await Store.find();
 
     res.status(200).json({
       success: true,
-      count: store.length,
-      data: store,
+      count: stores.length,
+      data: stores,
     });
   } catch (err) {
     res.status(500).json({
@@ -47,16 +45,16 @@ const getAllStores = async (req, res) => {
 
 const getStoreById = async (req, res) => {
   try {
-    const store = await Store.findById({ _id: req.params.id });
+    const store = await Store.findById(req.params.id);
 
     if (!store) {
       return res.status(404).json({
         success: false,
-        error: "store nai vetiyena jpatei nasoch haii",
+        message: "Store not found",
       });
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: store,
     });
@@ -70,30 +68,29 @@ const getStoreById = async (req, res) => {
 
 const updateStore = async (req, res) => {
   try {
-    const { name, address } = req.body;
-    let store = await Store.findById({ _id: req.params.id });
+    const { store_name, address, phone, store_owner } = req.body;
+
+    let store = await Store.findById(req.params.id);
 
     if (!store) {
       return res.status(404).json({
         success: false,
-        message: "store vetiyana hou",
+        message: "Store not found",
       });
     }
 
     store = await Store.findByIdAndUpdate(
       req.params.id,
-      {
-        name,
-        address,
-      },
+      { store_name, address, phone, store_owner },
       {
         new: true,
-        runValidatores: true,
-      },
+        runValidators: true, // fixed typo from runValidatores
+      }
     );
+
     res.status(200).json({
       success: true,
-      message: "store ko timiley  chaiyeko changes haru vayo haii",
+      message: "Store updated successfully",
       data: store,
     });
   } catch (err) {
@@ -107,14 +104,20 @@ const updateStore = async (req, res) => {
 const deleteStore = async (req, res) => {
   try {
     const store = await Store.findByIdAndDelete(req.params.id);
+
     if (!store) {
       return res.status(404).json({
         success: false,
-        message: "store vetiyana hou",
+        message: "Store not found",
       });
     }
 
-    await User.deleteOne();
+    // fixed: removed User.deleteOne() which was crashing (User not imported)
+    // fixed: added proper success response so request doesn't hang
+    res.status(200).json({
+      success: true,
+      message: "Store deleted successfully",
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -123,4 +126,4 @@ const deleteStore = async (req, res) => {
   }
 };
 
-module.exports = {updateStore, deleteStore, getAllStores, getStoreById, createStore};
+module.exports = { createStore, getAllStores, getStoreById, updateStore, deleteStore };
