@@ -16,10 +16,7 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: [true, "pasword nahalikana ta ka hunxa nih "],
-        minlength : [6, 'password kamti ma 6 ota ta hunei paronih'],
-        maxlength: [12, 'password 12 bata derai ta hunu vayena ni hou']
-
-
+        minlength : [6, 'password kamti ma 6 ota ta hunei paronih']
     },
 
     role: {
