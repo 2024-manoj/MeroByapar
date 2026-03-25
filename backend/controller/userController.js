@@ -7,12 +7,10 @@ exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, role, store_id, createdBy } = req.body;
 
-    // Check email uniqueness
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(400).json({ success: false, message: "Email already exists" });
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -20,7 +18,7 @@ exports.registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || 'cashier',
+      role: role || 'pending',
       store_id,
       createdBy
     });
@@ -42,11 +40,9 @@ exports.loginUser = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ success: false, message: "Incorrect password" });
 
-    // JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role, store_id: user.store_id },
       process.env.JWT_SECRET,
@@ -97,14 +93,27 @@ exports.updateUser = async (req, res) => {
     let user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
-    user.name = name || user.name;
+    user.name  = name  || user.name;
     user.email = email || user.email;
-    user.role = role || user.role;
-    user.store_id = store_id || user.store_id;
+
+    // If admin is assigning a real role (not pending), auto-verify the user.
+    // This lets users login even if they skipped email OTP verification.
+    if (role && role !== 'pending') {
+      user.role       = role;
+      user.isVerified = true;   // ← KEY FIX: admin approval = verified
+      user.otp        = null;
+      user.otpExpiry  = null;
+    } else if (role) {
+      user.role = role;
+    }
+
+    if (store_id) user.store_id = store_id;
+
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
+
     if (isActive !== undefined) user.isActive = isActive;
 
     await user.save();

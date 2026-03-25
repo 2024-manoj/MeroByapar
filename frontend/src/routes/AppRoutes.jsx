@@ -1,5 +1,4 @@
-import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "../components/Common/ProtectedRoute";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -8,102 +7,101 @@ import Features from "../pages/Features";
 import AdminDashboard from "../pages/AdminDashboard";
 import ManagerDashboard from "../pages/ManagerDashboard";
 import CashierDashboard from "../pages/CashierDashboard";
+import PendingApproval from "../pages/PendingApproval";
+
+// ─── Helper: get current user from storage ───────────────────────────────
+const getUser = () => {
+  try {
+    const raw = localStorage.getItem("user") || sessionStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const getToken = () =>
+  localStorage.getItem("token") || sessionStorage.getItem("token");
+
+// ─── ProtectedRoute ───────────────────────────────────────────────────────
+// allowedRoles: array of roles that can access this route
+function ProtectedRoute({ children, allowedRoles }) {
+  const token = getToken();
+  const user = getUser();
+
+  // Not logged in at all
+  if (!token || !user) return <Navigate to="/login" replace />;
+
+  // Logged in but role not allowed → redirect to the right place
+  if (!allowedRoles.includes(user.role)) {
+    switch (user.role) {
+      case "admin":    return <Navigate to="/admin/dashboard" replace />;
+      case "manager":  return <Navigate to="/manager/dashboard" replace />;
+      case "cashier":  return <Navigate to="/cashier/dashboard" replace />;
+      case "pending":  return <Navigate to="/pending" replace />;
+      default:         return <Navigate to="/login" replace />;
+    }
+  }
+
+  return children;
+}
+
+// ─── GuestRoute ─── redirect logged-in users away from login/register ────
+function GuestRoute({ children }) {
+  const token = getToken();
+  const user = getUser();
+
+  if (token && user) {
+    switch (user.role) {
+      case "admin":    return <Navigate to="/admin/dashboard" replace />;
+      case "manager":  return <Navigate to="/manager/dashboard" replace />;
+      case "cashier":  return <Navigate to="/cashier/dashboard" replace />;
+      case "pending":  return <Navigate to="/pending" replace />;
+      default: break;
+    }
+  }
+  return children;
+}
 
 function AppRoutes() {
   return (
     <Routes>
-
-      {/* Public pages — anyone can visit */}
+      {/* Public */}
       <Route path="/" element={<Home />} />
       <Route path="/features" element={<Features />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+
+      {/* Guest only (redirect if already logged in) */}
+      <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+      <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      {/* Protected — admin only */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute role="admin">
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* Pending approval - any logged-in user */}
+      <Route path="/pending" element={
+        <ProtectedRoute allowedRoles={["pending", "admin", "manager", "cashier"]}>
+          <PendingApproval />
+        </ProtectedRoute>
+      } />
 
-      {/* Protected — manager only */}
-      <Route
-        path="/manager/dashboard"
-        element={
-          <ProtectedRoute role="manager">
-            <ManagerDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* Role-protected dashboards */}
+      <Route path="/admin/dashboard" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      } />
 
-      {/* Protected — cashier only */}
-      <Route
-        path="/cashier/dashboard"
-        element={
-          <ProtectedRoute role="cashier">
-            <CashierDashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/manager/dashboard" element={
+        <ProtectedRoute allowedRoles={["manager"]}>
+          <ManagerDashboard />
+        </ProtectedRoute>
+      } />
 
-      {/* Unauthorized page */}
-      <Route
-        path="/unauthorized"
-        element={
-          <div style={{ textAlign: "center", padding: "80px 20px" }}>
-            <h1 style={{ fontSize: "4rem", marginBottom: "16px" }}>403</h1>
-            <h2 style={{ marginBottom: "12px" }}>Access Denied</h2>
-            <p style={{ color: "#6b7280", marginBottom: "24px" }}>
-              You don't have permission to view this page.
-            </p>
-            <a
-              href="/login"
-              style={{
-                padding: "10px 24px",
-                backgroundColor: "#3b82f6",
-                color: "white",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            >
-              Go to Login
-            </a>
-          </div>
-        }
-      />
+      <Route path="/cashier/dashboard" element={
+        <ProtectedRoute allowedRoles={["cashier"]}>
+          <CashierDashboard />
+        </ProtectedRoute>
+      } />
 
-      {/* 404 page */}
-      <Route
-        path="*"
-        element={
-          <div style={{ textAlign: "center", padding: "80px 20px" }}>
-            <h1 style={{ fontSize: "4rem", marginBottom: "16px" }}>404</h1>
-            <h2 style={{ marginBottom: "12px" }}>Page Not Found</h2>
-            <p style={{ color: "#6b7280", marginBottom: "24px" }}>
-              The page you're looking for doesn't exist.
-            </p>
-            <a
-              href="/"
-              style={{
-                padding: "10px 24px",
-                backgroundColor: "#3b82f6",
-                color: "white",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontWeight: "600",
-              }}
-            >
-              Go Home
-            </a>
-          </div>
-        }
-      />
-
+      {/* Catch-all */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
