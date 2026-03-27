@@ -33,9 +33,6 @@ const purchaseSchema = new mongoose.Schema({
     unique: true
   },
 
-
-
-
 })
 
 purchaseSchema.pre('save', async function(next) {
