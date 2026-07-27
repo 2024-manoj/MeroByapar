@@ -11,6 +11,14 @@ const createProduct = async (req, res) => {
       store_id,
     } = req.body;
 
+    // Validate required fields
+    if (!product_name || !category_id || !cost_price || !sell_price || !store_id) {
+      return res.status(400).json({
+        success: false,
+        message: "product_name, category_id, cost_price, sell_price, store_id sabai field chaiyo",
+      });
+    }
+
     const product = new Product({
       product_name,
       category_id,
