@@ -8,6 +8,13 @@ const createPurchase = async (req, res) => {
   try {
     const { supplier_id, manager_id, store_id, subtotal, discount } = req.body;
 
+    if (!supplier_id || !manager_id || !store_id || subtotal === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "supplier_id, manager_id, store_id, and subtotal are required",
+      });
+    }
+
     // Check supplier
     const supplier = await Supplier.findById(supplier_id);
     if (!supplier) {
