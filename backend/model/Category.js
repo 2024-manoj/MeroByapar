@@ -1,6 +1,6 @@
-const moongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const categorySchema = new moongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     category_name: {
       type: String,
@@ -8,7 +8,7 @@ const categorySchema = new moongoose.Schema(
       trim: true,
     },
      store_id:{
-        type:moongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'Store',
         required:true,
      },
@@ -23,4 +23,4 @@ const categorySchema = new moongoose.Schema(
 
 categorySchema.index({category_name:1, store_id:1}, {unique: true})
 
-module.exports = moongoose.model("Category", categorySchema);
+module.exports = mongoose.model("Category", categorySchema);

@@ -1,18 +1,18 @@
-const moongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const saleSchema = new moongoose.Schema({
+const saleSchema = new mongoose.Schema({
   invoice_number: {
     type: String,
     required: true,
     unique: true,
   },
   cashier_id: {
-    type: moongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
   store_id: {
-    type: moongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Store",
     required: true,
   },
@@ -49,4 +49,4 @@ saleSchema.pre('save', async function(next) {
 
 
 
-module.exports = moongoose.model('Sale',saleSchema);
+module.exports = mongoose.model('Sale',saleSchema);

@@ -1,6 +1,6 @@
-const moongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-const supplierSchema = new moongoose.Schema(
+const supplierSchema = new mongoose.Schema(
   {
     supplier_name: {
       type: String,
@@ -23,7 +23,7 @@ const supplierSchema = new moongoose.Schema(
     },
 
     store_id: {
-      type: moongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Store",
       required: true,
     },
@@ -33,4 +33,4 @@ const supplierSchema = new moongoose.Schema(
   },
 );
 
-module.exports = moongoose.model("Supplier", supplierSchema);
+module.exports = mongoose.model("Supplier", supplierSchema);
