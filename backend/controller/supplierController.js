@@ -4,6 +4,13 @@ const createSupplier = async (req, res) => {
   try {
     const { supplier_name, supplier_phone, address, email, store_id } = req.body;
 
+    if (!supplier_name || !supplier_phone || !store_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Supplier name, phone, and store ID are required",
+      });
+    }
+
     const existingSupplier = await Supplier.findOne({ email });
     if (existingSupplier) {
       return res.status(400).json({ success: false, message: 'Email already exists' });
