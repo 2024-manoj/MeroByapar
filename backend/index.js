@@ -93,6 +93,11 @@ app.post("/api/newsletter/subscribe", async (req, res) => {
   }
 });
 
+// --- Error Handling Middleware ---
+const { notFound, errorHandler } = require("./middleware/errorHandler");
+app.use(notFound);
+app.use(errorHandler);
+
 // --- Start Server ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
