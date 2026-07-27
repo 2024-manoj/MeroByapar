@@ -10,7 +10,7 @@ const createProduct = async (req, res) => {
       stock_quantity,
       store_id,
     } = req.body;
-    
+
     const product = new Product({
       product_name,
       category_id,
@@ -24,7 +24,7 @@ const createProduct = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "tapaiko safalta purbal naya Product baneko xa",
+      message: "tapaiko safalta purbak naya Product baneko xa",
       data: product,
     });
   } catch (err) {
@@ -43,7 +43,7 @@ const getAllProduct = async (req, res) => {
 
     res.status(200).json({
       success: true, // Fixed: changed false to true
-      message: "tapaiko product hary yesh prakar ko raheko xa",
+      message: "tapaiko product haru yesh prakar ko raheko xa",
       data: product,
       count: product.length,
     });
@@ -64,7 +64,7 @@ const getProductByID = async (req, res) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "tapaiko yo id ma kunei pani product xoina",
+        message: "tapaiko yo id ma kunei pani product xaina",
       });
     }
 
