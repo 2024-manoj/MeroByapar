@@ -4,6 +4,13 @@ const createCategory = async (req, res) => {
   try {
     const { category_name, description, image, store_id } = req.body;
 
+    if (!category_name || !store_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Category name and store ID are required",
+      });
+    }
+
     const existingCategory = await Category.findOne({
       category_name,
       store_id,
