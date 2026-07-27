@@ -6,7 +6,7 @@ const auth = async (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
-      return res.status(401).json({ error: 'Please login first' });
+      return res.status(401).json({ success: false, message: 'Please login first' });
     }
 
     // Decode JWT
@@ -16,13 +16,13 @@ const auth = async (req, res, next) => {
     const user = await User.findById(decoded.id).select('-password');
 
     if (!user) {
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ success: false, message: 'User not found' });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ success: false, message: 'Invalid token' });
   }
 };
 
