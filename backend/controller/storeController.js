@@ -4,6 +4,13 @@ const createStore = async (req, res) => {
   try {
     const { store_name, store_owner, phone, address } = req.body;
 
+    if (!store_name || !store_owner || !phone || !address) {
+      return res.status(400).json({
+        success: false,
+        message: "Store name, owner, phone, and address are required",
+      });
+    }
+
     const store = new Store({
       store_name,
       store_owner,
